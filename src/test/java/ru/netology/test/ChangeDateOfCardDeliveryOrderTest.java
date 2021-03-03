@@ -14,14 +14,15 @@ import static com.codeborne.selenide.Selenide.*;
 public class ChangeDateOfCardDeliveryOrderTest {
 
     @Test
-    void shouldSendCardDeliveryFormWhenCityIsValid () {
+    void shouldSendCardDeliveryFormWhenCityAndNameAreValid () {
         DataForRegistration newUser = DataGenerator.Registration.generateByCard("ru");
         String validCity = DataGenerator.Registration.generateValidCity();
+        String validName = DataGenerator.Registration.generateValidName();
         open("http://localhost:9999");
         $("[data-test-id=city] [placeholder=Город]").setValue(validCity);
         $("[placeholder='Дата встречи']").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[placeholder='Дата встречи']").setValue(newUser.getDataOfMeeting());
-        $("[data-test-id='name'] .input__control").setValue(newUser.getName());
+        $("[data-test-id='name'] .input__control").setValue(validName);
         $("[data-test-id='phone'] .input__control").setValue(newUser.getPhone());
         $("[data-test-id='agreement'] .checkbox__box").click();
         $$("[type='button']").find(exactText("Запланировать")).click();
@@ -45,15 +46,36 @@ public class ChangeDateOfCardDeliveryOrderTest {
     void shouldSendCardDeliveryFormWhenCityIsInvalid () {
         DataForRegistration newUser = DataGenerator.Registration.generateByCard("ru");
         String invalidCity = DataGenerator.Registration.generateInvalidCity();
+        String validName = DataGenerator.Registration.generateValidName();
         open("http://localhost:9999");
         $("[data-test-id=city] [placeholder=Город]").setValue(invalidCity);
         $("[placeholder='Дата встречи']").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[placeholder='Дата встречи']").setValue(newUser.getDataOfMeeting());
-        $("[data-test-id='name'] .input__control").setValue(newUser.getName());
+        $("[data-test-id='name'] .input__control").setValue(validName);
         $("[data-test-id='phone'] .input__control").setValue(newUser.getPhone());
         $("[data-test-id='agreement'] .checkbox__box").click();
         $$("[type='button']").find(exactText("Запланировать")).click();
         $(".input_invalid[data-test-id=city] .input__sub").
                 shouldHave(exactText("Доставка в выбранный город недоступна"));
     }
+
+    @Test
+    void shouldSendCardDeliveryFormWhenNameIsInvalid () {
+        DataForRegistration newUser = DataGenerator.Registration.generateByCard("ru");
+        String validCity = DataGenerator.Registration.generateValidCity();
+        String invalidName = DataGenerator.Registration.generateInvalidName();
+        open("http://localhost:9999");
+        $("[data-test-id=city] [placeholder=Город]").setValue(validCity);
+        $("[placeholder='Дата встречи']").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[placeholder='Дата встречи']").setValue(newUser.getDataOfMeeting());
+        $("[data-test-id='name'] .input__control").setValue(invalidName);
+        $("[data-test-id='phone'] .input__control").setValue(newUser.getPhone());
+        $("[data-test-id='agreement'] .checkbox__box").click();
+        $$("[type='button']").find(exactText("Запланировать")).click();
+        $(".input_invalid[data-test-id=name] .input__sub").
+                shouldHave(exactText("Имя и Фамилия указаные неверно. " +
+                        "Допустимы только русские буквы, пробелы и дефисы."));
+    }
+
+
 }
