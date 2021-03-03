@@ -20,7 +20,6 @@ public class DataGenerator {
             return new DataForRegistration(
                     LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
                     LocalDate.now().plusDays(5).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
-                    faker.name().fullName(),
                     faker.phoneNumber().phoneNumber()
             );
         }
@@ -37,6 +36,21 @@ public class DataGenerator {
             Random random = new Random();
             int randomIndex = random.nextInt(invalidCity.length);
             return invalidCity[randomIndex];
+        }
+
+        public static String generateValidName() {
+            String[] validName = {"Воробьева Анна", "Сорокина Нина Сергеевна", "Павлов Антоо Борисович",
+                    "Малиновский Никита", "Богданов Богдан"};
+            Random random = new Random();
+            int randomIndex = random.nextInt(validName.length);
+            return validName[randomIndex];
+        }
+
+        public static String generateInvalidName() {
+            String[] invalidName = {"Воробьёва Анна", "Алёна Антонова"};
+            Random random = new Random();
+            int randomIndex = random.nextInt(invalidName.length);
+            return invalidName[randomIndex];
         }
 
     }
