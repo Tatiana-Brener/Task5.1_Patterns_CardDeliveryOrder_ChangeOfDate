@@ -9,11 +9,8 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 
 public class DataForRegistration {
-    private final String city;
     private final String dataOfMeeting;
     private final String anotherDataOfMeeting;
     private final String name;
     private final String phone;
-
-
 }
